@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Body Fat Calculator</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: top;
+            height: 100vh;
+            background-image: url("https://www.toptal.com/designers/subtlepatterns/uploads/pw_maze_black.png");
+        }
+
+        header {
+            background-color: #333333;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+            font-size: 24px;
+            font-weight: bold;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+        }
+
+        .card {
+            background-color: #424242;
+            color: #fff;
+            border-radius: 5px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+            padding: 20px;
+            margin: 20px;
+            text-align: center;
+            max-width: 300px;
+            width: 100%;
+        }
+
+        form {
+            margin: 0 auto;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            margin-top: 10px;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        input[type="text"] {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+            width: 35%;
+            box-sizing: border-box;
+            text-align: center;
+        }
+
+        button[type="submit"] {
+            background-color: #333333;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 18px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+
+        .result {
+            margin-top: 20px;
+            font-size: 24px;
+            font-weight: bold;
+            background-color: #333333;
+            color: #fff;
+            padding: 20px;
+            text-align: center;
+            border-top-left-radius: 5px;
+            border-top-right-radius: 5px;
+        }
+
+        .increment-l {
+            padding: 10px;
+            margin-right: 10px;
+        }
+
+        .increment-r {
+            padding: 10px;
+            margin-left: 10px;
+        }
+
+        table {
+            margin: 10px auto;
+            border-collapse: collapse;
+            border-radius: 2px;
+        }
+
+        th,
+        td {
+            text-align: center;
+            border: 1px solid white;
+            padding: 10px;
+        }
+
+        select {
+            height: 35px;
+            font-size: 15px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            padding-left: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="card">
+        <header>Body Fat Calculator</header>
+
+        <form>
+            <label for="gender">Gender:</label>
+            <select id="gender" name="gender">
+                <option value="male">Male</option>
+                <option value="female">Female</option>
+            </select>
+        </form>
+
+        <br>
+
+        <form onsubmit="return false;">
+            <label for="weight">Weight</label>
+            <button type="button" id="incrementWeightDown" class="increment-l">-</button>
+            <input type="text" id="weight" name="weight" placeholder="lbs" inputmode="numeric">
+            <button type="button" id="incrementWeightUp" class="increment-r">+</button>
+
+            <br>
+            <br>
+
+            <label for="waist">Waist circumference</label>
+            <button type="button" id="incrementWaistDown" class="increment-l">-</button>
+            <input type="text" id="waist" name="waist" placeholder="inches" inputmode="numeric">
+            <button type="button" id="incrementWaistUp" class="increment-r">+</button>
+
+            <div class="result" id="result">Body Fat:</div>
+        </form>
+    </div>
+
+    <div class="card">
+        <header style="text-align: center;">ARMY Body Fat Standards</header>
+        <table>
+            <tr>
+                <th>Age group</th>
+                <th>Male</th>
+                <th>Female</th>
+            </tr>
+            <tr>
+                <td>17–20</td>
+                <td>20%</td>
+                <td>30%</td>
+            </tr>
+            <tr>
+                <td>21–27</td>
+                <td>22%</td>
+                <td>32%</td>
+            </tr>
+            <tr>
+                <td>28–39</td>
+                <td>24%</td>
+                <td>34%</td>
+            </tr>
+            <tr>
+                <td>40 and older</td>
+                <td>26%</td>
+                <td>36%</td>
+            </tr>
+        </table>
+    </div>
+
+
+
+    <script>
+        var genderSelect = document.getElementById("gender");
+        var weightInput = document.getElementById("weight");
+        var waistInput = document.getElementById("waist");
+
+        genderSelect.addEventListener("change", function () {
+            calculateBodyFat();
+        });
+
+        weightInput.addEventListener("input", function () {
+            calculateBodyFat();
+        });
+
+        waistInput.addEventListener("input", function () {
+            calculateBodyFat();
+        });
+
+
+        const incrementWeightDown = document.getElementById('incrementWeightDown');
+        const incrementWeightUp = document.getElementById('incrementWeightUp');
+        const incrementWaistDown = document.getElementById('incrementWaistDown');
+        const incrementWaistUp = document.getElementById('incrementWaistUp');
+        const weight = document.getElementById('weight');
+        const waist = document.getElementById('waist');
+
+        incrementWeightDown.addEventListener('click', () => {
+            const currentValue = parseInt(weight.value);
+            const incrementAmount = 1;
+            const newValue = currentValue - incrementAmount;
+            weight.value = newValue;
+            calculateBodyFat()
+        });
+
+        incrementWeightUp.addEventListener('click', () => {
+            const currentValue = parseInt(weight.value);
+            const incrementAmount = 1;
+            const newValue = currentValue + incrementAmount;
+            weight.value = newValue;
+            calculateBodyFat()
+        });
+
+        incrementWaistDown.addEventListener('click', () => {
+            const currentValue = parseFloat(waist.value);
+            const incrementAmount = 0.5;
+            const newValue = currentValue - incrementAmount;
+            waist.value = newValue;
+            calculateBodyFat()
+        });
+
+        incrementWaistUp.addEventListener('click', () => {
+            const currentValue = parseFloat(waist.value);
+            const incrementAmount = 0.5;
+            const newValue = currentValue + incrementAmount;
+            waist.value = newValue;
+            calculateBodyFat()
+        });
+
+        function calculateBodyFatM(weight, waist) {
+            var bodyFat = (waist * 1.99) - (0.12 * weight) - 26.97;
+            return bodyFat;
+        }
+
+        function calculateBodyFatF(weight, waist) {
+            var bodyFat = (waist * 1.27) - (0.015 * weight) - 9.15;
+            return bodyFat;
+        }
+
+        function calculateBodyFat() {
+            var weight = parseFloat(weightInput.value);
+            var waist = parseFloat(waistInput.value);
+            var gender = genderSelect.value;
+            var bodyFat = 0;
+            if (gender === "male") {
+                bodyFat = calculateBodyFatM(weight, waist);
+            } else if (gender === "female") {
+                bodyFat = calculateBodyFatF(weight, waist);
+            }
+            if (weight > 0 && waist > 0) {
+                document.getElementById("result").innerHTML = "Body Fat: " + bodyFat.toFixed(2) + "%";
+            }
+        }
+    </script>
+</body>
+
+</html>
